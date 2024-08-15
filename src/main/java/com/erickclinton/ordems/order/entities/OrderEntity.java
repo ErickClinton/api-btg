@@ -1,6 +1,6 @@
 package com.erickclinton.ordems.order.entities;
 
-import org.springframework.data.annotation.Id;
+import com.erickclinton.ordems.order.dto.OrderCreatedEventDto;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -22,9 +22,16 @@ public class OrderEntity {
     @Field(targetType = FieldType.DECIMAL128)
     private BigDecimal total;
 
-    private List<OrderItem> items;
+    private List<OrderItemEntity> items;
 
     public OrderEntity() {
+    }
+
+    public OrderEntity(OrderCreatedEventDto orderCreatedEventDto, List<OrderItemEntity> orderItemEntities, BigDecimal total) {
+        this.orderId = orderCreatedEventDto.codigoPedido();
+        this.customerId = orderCreatedEventDto.codigoCliente();
+        this.items = orderItemEntities;
+        this.total = total;
     }
 
     public Long getOrderId() {
@@ -51,11 +58,11 @@ public class OrderEntity {
         this.total = total;
     }
 
-    public List<OrderItem> getItems() {
+    public List<OrderItemEntity> getItems() {
         return items;
     }
 
-    public void setItems(List<OrderItem> items) {
+    public void setItems(List<OrderItemEntity> items) {
         this.items = items;
     }
 }
